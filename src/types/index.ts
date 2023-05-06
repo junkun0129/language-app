@@ -11,10 +11,11 @@ type License = {
   name: string;
   url: string;
 };
-type Phonetics = {
+export type Phonetics = {
   audio: string;
   license: License;
   sourceUrl: string;
+  text: string;
 };
 export type Dictionary = {
   license: {
@@ -26,4 +27,9 @@ export type Dictionary = {
   phonetics: Phonetics[];
   sourceUrls: string[];
   word: string;
+};
+export type TranslateInfo = {
+  text: string[];
+  source_lang: string;
+  target_lang: string;
 };

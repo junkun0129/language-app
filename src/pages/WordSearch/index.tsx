@@ -2,15 +2,30 @@ import * as React from "react";
 import { Component, useState, useEffect } from "react";
 import { Box, TextField, Fab, Paper } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Dictionary } from "../../types";
+import { Dictionary, Phonetics, TranslateInfo } from "../../types";
+import axios from "axios";
 function WordSearch() {
   const [word, setWord] = useState("");
   const [wordInfo, setWordInfo] = useState<Partial<Dictionary[]> | null>(null);
-
+  const [phonetics, setPhonetics] = useState<Partial<Phonetics> | null>(null);
+  const [translateWords, setTranslateWords] = useState<Partial<TranslateInfo>>({
+    text: ["apple", "lkj"],
+    target_lang: "JA",
+  });
   useEffect(() => {
-    console.log(wordInfo);
+    if (wordInfo) {
+      const phoneticFilter = wordInfo[0]?.phonetics.filter(
+        (element) => element.hasOwnProperty("text") && element.audio !== ""
+      );
+
+      if (phoneticFilter) {
+        setPhonetics(phoneticFilter[0]);
+        console.log(phoneticFilter[0]);
+      }
+    }
   }, [wordInfo]);
-  const submitWord = () => {
+
+  const submitWordMeaning = () => {
     fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`, {
       method: "GET",
     })
@@ -19,6 +34,28 @@ function WordSearch() {
         console.log(data);
         setWordInfo(data);
       });
+  };
+
+  const submitWordTranslate = () => {
+    // fetch("http://localhost:8000/translate", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     text: translateWords.text,
+    //     source_lang: translateWords.source_lang,
+    //     target_lang: translateWords.target_lang,
+    //   }),
+    //   headers: { "Content-Type": "application/json" },
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     console.log(data, "data");
+    //   });
+    axios
+      .post(`http://localhost:8000/translate/`, {
+        translateWords,
+      })
+      .then((res) => console.log(res))
+      .then((data) => console.log(data));
   };
 
   return (
@@ -44,9 +81,12 @@ function WordSearch() {
           }}
         >
           <h1>WordTranslate</h1>
-          <TextField onChange={(e) => setWord(e.target.value)}></TextField>
+          <TextField
+            name="translateWords"
+            onChange={(e) => setTranslateWords(e.target.value)}
+          ></TextField>
           <Fab
-            onClick={submitWord}
+            onClick={submitWordTranslate}
             variant="extended"
             size="medium"
             color="primary"
@@ -56,7 +96,7 @@ function WordSearch() {
             submit
           </Fab>
         </Paper>
-        {wordInfo && (
+        {/* {wordInfo && (
           <Paper
             elevation={3}
             sx={{
@@ -64,48 +104,44 @@ function WordSearch() {
               height: "50%",
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-around",
               alignItems: "center",
               overflow: "scroll",
             }}
           >
+            <h1>{wordInfo[0]?.word}</h1>
+            <h2>{phonetics?.text}</h2>
+            <audio controls>
+              <source src={phonetics?.audio} />
+            </audio>
+            <a href={wordInfo[0]?.sourceUrls}>wiki</a>
             {wordInfo &&
               wordInfo.map((info, i) => {
                 return (
-                  <div>
-                    {info && (
-                      <div>
-                        <div>{i}:</div>
-                        <div>
-                          meaning:{" "}
-                          {info.meanings.map((meaning, i) => {
-                            return (
-                              <>
-                                <div>{meaning.partOfSpeech}</div>
-                                <div>
-                                  {meaning.definitions.map((def, i) => {
-                                    return (
-                                      <div>
-                                        <div>definition: {def.definition}</div>
-                                        <div>example: {def.example}</div>
-                                      </div>
-                                    );
-                                  })}
-                                </div>
-                              </>
-                            );
-                          })}
-                        </div>
-                        {info.sourceUrls.map((source, i) => {
-                          return <a href={source}>{source}</a>;
-                        })}
-                      </div>
-                    )}
-                  </div>
+                  <>
+                    {info?.meanings.map((mean, i) => {
+                      return (
+                        <>
+                          <h3>{mean.partOfSpeech}</h3>
+                          <div>
+                            {mean.definitions.map((def, i) => {
+                              return (
+                                <>
+                                  <div>definition: {def.definition}</div>
+                                  {def.example && (
+                                    <div>example: {def.example}</div>
+                                  )}
+                                </>
+                              );
+                            })}
+                          </div>
+                        </>
+                      );
+                    })}
+                  </>
                 );
               })}
           </Paper>
-        )}
+        )} */}
       </div>
     </>
   );

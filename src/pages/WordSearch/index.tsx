@@ -2,16 +2,22 @@ import * as React from "react";
 import { Component, useState, useEffect } from "react";
 import { Box, TextField, Fab, Paper } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Dictionary, Phonetics, TranslateInfo } from "../../types";
+import { motion } from "framer-motion";
+import {
+  Dictionary,
+  Phonetics,
+  TranslateInfo,
+  languageNames,
+} from "../../types";
+
+import { countries } from "../../types";
 import axios from "axios";
 function WordSearch() {
   const [word, setWord] = useState("");
   const [wordInfo, setWordInfo] = useState<Partial<Dictionary[]> | null>(null);
   const [phonetics, setPhonetics] = useState<Partial<Phonetics> | null>(null);
-  const [translateWords, setTranslateWords] = useState<Partial<TranslateInfo>>({
-    text: ["apple", "lkj"],
-    target_lang: "JA",
-  });
+  const [translateWords, setTranslateWords] = useState("");
+  const [translatedWords, setTranslatedWords] = useState<string | null>(null);
   useEffect(() => {
     if (wordInfo) {
       const phoneticFilter = wordInfo[0]?.phonetics.filter(
@@ -31,31 +37,44 @@ function WordSearch() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        console.log(data), ";lll";
         setWordInfo(data);
       });
   };
+  const encodedParams = new URLSearchParams();
+  encodedParams.set("q", translateWords);
+  encodedParams.set("target", "en");
+  encodedParams.set("source", "ja");
 
-  const submitWordTranslate = () => {
-    // fetch("http://localhost:8000/translate", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     text: translateWords.text,
-    //     source_lang: translateWords.source_lang,
-    //     target_lang: translateWords.target_lang,
-    //   }),
-    //   headers: { "Content-Type": "application/json" },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     console.log(data, "data");
+  const options = {
+    method: "POST",
+    url: "https://google-translate1.p.rapidapi.com/language/translate/v2",
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      "Accept-Encoding": "application/gzip",
+      "X-RapidAPI-Key": "f15ae8a9d7msh571de8bd79995dbp166412jsn047b3e5829eb",
+      "X-RapidAPI-Host": "google-translate1.p.rapidapi.com",
+    },
+    data: encodedParams,
+  };
+  const submitWordTranslate = async () => {
+    const response = await axios.request(options);
+
+    setTranslatedWords(response.data.data.translations[0].translatedText);
+    // axios
+    //   .post(`https://libretranslate.de/translate`, {
+    //     q: "皮肉を言うのはやめよう",
+    //     source: "ja",
+    //     target: "en",
+    //   })
+    //   .then((response) => {
+    //     console.log(response.data);
     //   });
-    axios
-      .post(`http://localhost:8000/translate/`, {
-        translateWords,
-      })
-      .then((res) => console.log(res))
-      .then((data) => console.log(data));
+    // axios
+    //   .post(`http://localhost:8000/translate/`, {
+    //     translateWords,
+    //   })
+    //   .then((res) => console.log(res));
   };
 
   return (
@@ -96,6 +115,25 @@ function WordSearch() {
             submit
           </Fab>
         </Paper>
+        {translatedWords && (
+          <Paper
+            sx={{ display: "flex", width: 100, justifyContent: "space-around" }}
+          >
+            {translatedWords.split(" ").map((word) => {
+              return (
+                <motion.div
+                  style={{ padding: 10, borderRadius: 15 }}
+                  whileHover={{
+                    backgroundColor: "lightgray",
+                    cursor: "pointer",
+                  }}
+                >
+                  {word}
+                </motion.div>
+              );
+            })}
+          </Paper>
+        )}
         {/* {wordInfo && (
           <Paper
             elevation={3}

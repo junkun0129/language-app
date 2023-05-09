@@ -2,10 +2,9 @@ type Definitions = {
   definition: string;
   example: string;
 };
-type Meanings = {
+export type Meanings = {
   definitions: Definitions[];
   partOfSpeech: string;
-  synonyms: string[];
 };
 type License = {
   name: string;
@@ -18,13 +17,8 @@ export type Phonetics = {
   text: string;
 };
 export type Dictionary = {
-  license: {
-    name: string;
-    url: string;
-  };
   meanings: Meanings[];
-  phonetic: string;
-  phonetics: Phonetics[];
+  phonetic: Phonetics;
   sourceUrls: string[];
   word: string;
 };

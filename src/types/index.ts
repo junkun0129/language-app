@@ -12,12 +12,10 @@ type License = {
 };
 export type Phonetics = {
   audio: string;
-  license: License;
-  sourceUrl: string;
   text: string;
 };
 export type Dictionary = {
-  meanings: Meanings[];
+  meanings: Meanings[][];
   phonetic: Phonetics;
   sourceUrls: string[];
   word: string;

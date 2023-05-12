@@ -255,54 +255,52 @@ function WordSearch() {
                                   }}
                                 >
                                   {wordInfo.meanings.map((meaning, row) => {
-                                    return meaning.map((mean, column) => {
-                                      return (
-                                        <div>
-                                          <div
-                                            style={{
-                                              padding: "10px",
-                                              backgroundColor: "grey",
-                                              fontSize: "1.5rem",
-                                            }}
-                                          >
-                                            {mean.partOfSpeech}
-                                          </div>
-                                          <div>
-                                            {mean.definitions.map((def, i) => {
-                                              return (
-                                                <div
-                                                  style={{
-                                                    padding: "2px",
-                                                    border: "1px solid black",
-                                                  }}
-                                                >
-                                                  <div>
-                                                    <div
-                                                      style={{
-                                                        fontSize: "1.2rem",
-                                                      }}
-                                                    >
-                                                      ・definition
-                                                    </div>
-                                                    <div>{def.definition}</div>
-                                                  </div>
-                                                  <div>
-                                                    <div
-                                                      style={{
-                                                        fontSize: "1.2rem",
-                                                      }}
-                                                    >
-                                                      ・example
-                                                    </div>
-                                                    <div>{def.example}</div>
-                                                  </div>
-                                                </div>
-                                              );
-                                            })}
-                                          </div>
+                                    return (
+                                      <div>
+                                        <div
+                                          style={{
+                                            padding: "10px",
+                                            backgroundColor: "grey",
+                                            fontSize: "1.5rem",
+                                          }}
+                                        >
+                                          {meaning.partOfSpeech}
                                         </div>
-                                      );
-                                    });
+                                        <div>
+                                          {meaning.definitions.map((def, i) => {
+                                            return (
+                                              <div
+                                                style={{
+                                                  padding: "2px",
+                                                  border: "1px solid black",
+                                                }}
+                                              >
+                                                <div>
+                                                  <div
+                                                    style={{
+                                                      fontSize: "1.2rem",
+                                                    }}
+                                                  >
+                                                    ・definition
+                                                  </div>
+                                                  <div>{def.definition}</div>
+                                                </div>
+                                                <div>
+                                                  <div
+                                                    style={{
+                                                      fontSize: "1.2rem",
+                                                    }}
+                                                  >
+                                                    ・example
+                                                  </div>
+                                                  <div>{def.example}</div>
+                                                </div>
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      </div>
+                                    );
                                   })}
                                 </div>
                                 <div

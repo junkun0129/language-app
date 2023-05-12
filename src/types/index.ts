@@ -15,7 +15,7 @@ export type Phonetics = {
   text: string;
 };
 export type Dictionary = {
-  meanings: Meanings[][];
+  meanings: Meanings[];
   phonetic: Phonetics;
   sourceUrls: string[];
   word: string;

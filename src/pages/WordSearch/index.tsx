@@ -57,13 +57,17 @@ function WordSearch() {
             const wordMeaning = data.map((element: Dictionary) => {
               return element.meanings.map((meaning) => {
                 return {
-                  definitions: meaning.definitions.map((def) => {
+                  definitions: meaning.map((mean) => {
                     return {
-                      definition: def.definition,
-                      example: def.example,
+                      definitions: mean.definitions.map((def) => {
+                        return {
+                          definition: def.definition,
+                          example: def.example,
+                        };
+                      }),
+                      partOfSpeech: mean.partOfSpeech,
                     };
                   }),
-                  partOfSpeech: meaning.partOfSpeech,
                 };
               });
             });

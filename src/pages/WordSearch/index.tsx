@@ -12,16 +12,8 @@ import {
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { motion } from "framer-motion";
 import VolumeDownIcon from "@mui/icons-material/VolumeDown";
-import {
-  Dictionary,
-  Phonetics,
-  TranslateInfo,
-  languageNames,
-} from "../../types";
-import { countries } from "../../types";
+import { Dictionary, Phonetics } from "../../types";
 import axios from "axios";
-import AudioPlayer from "react-h5-audio-player";
-import H5AudioPlayer from "react-h5-audio-player";
 function WordSearch() {
   const player = useRef<HTMLAudioElement>(null);
   const [wordInfo, setWordInfo] = useState<Dictionary>();
